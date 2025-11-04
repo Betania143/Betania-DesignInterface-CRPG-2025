@@ -24,19 +24,61 @@
 
     <!-- Conteúdo principal -->
     <main>
-        <h1>𝑬𝒙𝒑𝒍𝒐𝒓𝒂𝒏𝒅𝒐 𝒐 𝑶𝒄𝒆𝒂𝒏𝒐</h1>
-        <p>Descubra as maravilhas da vida marinha, conheça espécies incríveis e entenda a importância de preservar esse ecossistema.</p>
+  <h1>Bem-vindo à Locadora de Veículos</h1>
+  <p>Encontre o carro ideal para sua viagem, trabalho ou lazer.</p>
 
-        <div class="carros">
-            <img src="https://i0.wp.com/olharoceanografico.com/wp-content/uploads/2024/04/aguaviva.webp?resize=999%2C561&ssl=1"
-                alt="Carro esportivo vermelho">
-            <img src="https://biologo.com.br/bio/wp-content/uploads/2016/05/Tubarao-baleia-ecologia.jpg"
-                alt="SUV preto">
-            <img src="https://portal.comunique-se.com.br/wp-content/uploads/2024/07/f3dce79c-c9fc-4e88-b75d-bfc17c78a3bf.jpg"
-                alt="Carro branco">
-        </div>
-    </main>
+  <div id="conteudo" class="conteudo-scroll">
+    <p>Carregando conteúdo...</p>
+  </div>
+</main>
 
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMA9lKGeUaNzqG4TKPp1tOKWVWrMwTwsBpt1hfn8ZEed7VSOY2Oz0L9wk4duZ0cMlfAQ/exec"
+async function carregarConteudo() {
+  const container = document.getElementById('conteudo');
+  container.innerHTML = "<p>Carregando conteúdo...</p>";
+
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const dados = await res.json();
+    container.innerHTML = '';
+
+    dados.forEach(item => {
+      const bloco = document.createElement('div');
+      bloco.className = 'bloco-item';
+
+      const titulo = document.createElement('h2');
+      titulo.textContent = item.Título || '';
+      bloco.appendChild(titulo);
+
+      const descricao = document.createElement('p');
+      descricao.textContent = item.Descrição || '';
+      bloco.appendChild(descricao);
+
+      if (item.Url && item.Url.startsWith('http')) {
+        if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
+          const img = document.createElement('img');
+          img.src = item.Url;
+          img.alt = item.Título || 'Imagem';
+          bloco.appendChild(img);
+        } else {
+          const link = document.createElement('a');
+          link.href = item.Url;
+          link.textContent = 'Ver mais';
+          bloco.appendChild(link);
+        }
+      }
+
+      container.appendChild(bloco);
+    });
+  } catch (err) {
+    container.innerHTML = "<p>Erro ao carregar dados: " + err.message + "</p>";
+  }
+}
+
+carregarConteudo();
+</script>
+    
     <!-- Rodapé -->
     <footer>
         <p>&copy; 2025 Vida Marinha IFPR - Todos os direitos reservados</p>
